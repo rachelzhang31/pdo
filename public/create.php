@@ -36,6 +36,26 @@ if (isset($_POST['submit'])) {
       );
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "program", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
+    else if (!empty($_POST['volunteerid'])) { 
+      $qry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
+      $result = $connection->query($qry); 
+      $row = $result->fetch(PDO::FETCH_ASSOC); 
+      $programid = $row['pid']; 
+      $new = array(
+        "volunteerid" => $_POST['volunteerid'],
+        "volunteerfname" => $_POST['volunteerfname'],
+        "volunteerlname" => $_POST['volunteerlname'],
+        "volunteeryear" => $_POST['volunteeryear'],
+        "volunteerphone" => $_POST['volunteerphone'], 
+        "volunteeremail" => $_POST['volunteeremail'],
+        "programid" => $programid 
+      ); 
+      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "volunteer", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+    } 
+
+    /*
+    ^^ still have to add site foreign key connection 
+    */ 
     
     $statement = $connection->prepare($sql);
     $statement->execute($new);
@@ -47,51 +67,90 @@ if (isset($_POST['submit'])) {
 <?php require "templates/header.php"; ?>
 
 
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script type="text/JavaScript"> 
-    function displaySite() { 
-      document.getElementById("mysite").style.display = "block"; 
-    } 
-    function displayProgram() { 
-      document.getElementById("myprogram").style.display = "block"; 
-    } 
+    $(document).ready(function(){
+      $('input[type="radio"]').click(function(){
+          var inputValue = $(this).attr("value");
+          var targetBox = $("." + inputValue);
+          $(".box").not(targetBox).hide();
+          $(targetBox).show();
+      });
+    });
   </script> 
 
+  <div class="radio-toolbar"> 
+    <input type="radio" name="select" id="siteselect" value="Site" />
+      <label for="siteselect">Site</label> 
+    <input type="radio" name="select" id="programselect" value="Program" />
+      <label for="programselect">Program</label> 
+    <input type="radio" name="select" id="volunteerselect" value="Volunteer" />
+      <label for="volunteerselect">Volunteer</label> 
+    <input type="radio" name="select" id="directorselect" value="Director" />
+      <label for="directorselect">Program Director</label> 
+    <input type="radio" name="select" id="managerselect" value="Manager" />
+      <label for="managerselect">Manager</label> 
+    <input type="radio" name="select" id="instructorselect" value="Instructor" />
+      <label for="instructorselect">Instructor</label> 
+    <input type="radio" name="select" id="adminselect" value="Administrator" />
+      <label for="adminselect">Administrator</label> 
+  </div> 
 
+  <div class="Site box" style="display:none"> 
+    <form method="post" id="mysite">
+      <h2>Add a Site</h2>
+      <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+      <label for="siteid">Site ID</label>
+      <input type="text" name="siteid" id="siteid">
+      <label for="sitename">Site Name</label>
+      <input type="text" name="sitename" id="sitename">
+      <label for="sitestreet">Site Street</label>
+      <input type="text" name="sitestreet" id="sitestreet">
+      <label for="sitecity">Site City</label>
+      <input type="text" name="sitecity" id="sitecity">
+      <label for="sitestate">Site State</label>
+      <input type="text" name="sitestate" id="sitestate">
+      <label for="sitezip">Site Zip</label>
+      <input type="text" name="sitezip" id="sitezip">
+      <label for="sitephone">Site Phone</label>
+      <input type="text" name="sitephone" id="sitephone">
+      <input type="submit" name="submit" value="Submit">
+    </form>
+  </div> 
 
-  
-  <input type="submit" name="site"
-    class="button" value="Site" onclick="displaySite()" />
-  <form method="post" style="display:none" id="mysite">
-    <h2>Add a Site</h2>
-    <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-    <label for="siteid">Site ID</label>
-    <input type="text" name="siteid" id="siteid">
-    <label for="sitename">Site Name</label>
-    <input type="text" name="sitename" id="sitename">
-    <label for="sitestreet">Site Street</label>
-    <input type="text" name="sitestreet" id="sitestreet">
-    <label for="sitecity">Site City</label>
-    <input type="text" name="sitecity" id="sitecity">
-    <label for="sitestate">Site State</label>
-    <input type="text" name="sitestate" id="sitestate">
-    <label for="sitezip">Site Zip</label>
-    <input type="text" name="sitezip" id="sitezip">
-    <label for="sitephone">Site Phone</label>
-    <input type="text" name="sitephone" id="sitephone">
-    <input type="submit" name="submit" value="Submit">
-  </form>
+  <div class="Program box" style="display:none"> 
+    <form method="post" id="myprogram">
+      <h2>Add a Program</h2>
+      <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+      <label for="programid">Program ID</label>
+      <input type="text" name="programid" id="programid">
+      <label for="programname">Program Name</label>
+      <input type="text" name="programname" id="programname">
+      <input type="submit" name="submit" value="Submit">
+    </form>
+  </div> 
 
-  <input type="submit" name="program"
-    class="button" value="Program" onclick="displayProgram()" />
-  <form method="post" style="display:none" id="myprogram">
-    <h2>Add a Program</h2>
-    <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-    <label for="programid">Program ID</label>
-    <input type="text" name="programid" id="programid">
-    <label for="programname">Program Name</label>
-    <input type="text" name="programname" id="programname">
-    <input type="submit" name="submit" value="Submit">
-  </form>
+  <div class="Volunteer box" style="display:none"> 
+    <form method="post" id="myvolunteer">
+      <h2>Add a Volunteer</h2>
+      <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+      <label for="volunteerid">Volunteer ID</label>
+      <input type="text" name="volunteerid" id="volunteerid">
+      <label for="volunteerfname">First Name</label>
+      <input type="text" name="volunteerfname" id="volunteerfname">
+      <label for="volunteerlname">Last Name</label>
+      <input type="text" name="volunteerlname" id="volunteerlname">
+      <label for="volunteeryear">Year</label>
+      <input type="text" name="volunteeryear" id="volunteeryear">
+      <label for="volunteerphone">Phone</label>
+      <input type="text" name="volunteerphone" id="volunteerphone">
+      <label for="volunteeremail">Email</label>
+      <input type="text" name="volunteeremail" id="volunteeremail">
+      <label for="programname">Program Name</label>
+      <input type="text" name="programname" id="programname">
+      <input type="submit" name="submit" value="Submit">
+    </form>
+  </div> 
 
   <a href="index.php">Back to home</a>
 
