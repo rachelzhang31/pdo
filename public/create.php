@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Use an HTML form to create a new entry in the
- * users table.
- *
+ * Creating new entries in each of the tables 
+ * Insertion into associative tables is done automically through
+ * related table insertion 
  */
 
 require "../config.php";
@@ -30,6 +30,7 @@ if (isset($_POST['submit'])) {
       );
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "site", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
+
     /* ***** PROGRAM ***** */ 
     else if (!empty($_POST['programid'])) { 
       $new = array(
@@ -38,6 +39,7 @@ if (isset($_POST['submit'])) {
       );
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "program", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
+
     /* ***** VOLUNTEER ***** */ 
     else if (!empty($_POST['volunteerid'])) { 
       $progqry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
@@ -62,6 +64,7 @@ if (isset($_POST['submit'])) {
       ); 
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "volunteer", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
+
     /* ***** DIRECTOR ***** */ 
     else if (!empty($_POST['directorid'])) { 
       $progqry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
@@ -74,6 +77,11 @@ if (isset($_POST['submit'])) {
       $siterow = $siteresult->fetch(PDO::FETCH_ASSOC); 
       $siteid = $siterow['sid']; 
 
+      $adminqry = "SELECT ADMINISTRATORID AS adminid FROM ADMINISTRATOR WHERE ADMINISTRATORNAME = '{$_POST['administratorname']}'"; 
+      $adminresult = $connection->query($adminqry); 
+      $adminrow = $adminresult->fetch(PDO::FETCH_ASSOC); 
+      $administratorid = $adminrow['adminid']; 
+
       $new = array(
         "directorid" => $_POST['directorid'],
         "directorfname" => $_POST['directorfname'],
@@ -85,7 +93,17 @@ if (isset($_POST['submit'])) {
         "siteid" => $siteid
       ); 
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "director", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      
+      // required for inserting into associative table 
+      $assoc = array(
+        "directorid" => $_POST['directorid'], 
+        "administratorid" => $administratorid
+      );       
+      $sqlassoc = sprintf("INSERT INTO %s (%s) values (%s)", "administration", implode(", ", array_keys($assoc)), ":" . implode(", :", array_keys($assoc))); 
+      $statementassoc = $connection->prepare($sqlassoc);
+      $statementassoc->execute($assoc);
     } 
+
     /* ***** INSTRUCTOR ***** */ 
     else if (!empty($_POST['instructorid'])) { 
       $siteqry = "SELECT SITEID AS sid FROM SITE WHERE SITENAME = '{$_POST['sitename']}'";
@@ -102,17 +120,18 @@ if (isset($_POST['submit'])) {
       ); 
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "instructor", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
+
     /* ***** ADMINISTRATOR ***** */ 
     else if (!empty($_POST['administratorid'])) { 
       $new = array(
         "administratorid" => $_POST['administratorid'],
-        "administratorfname" => $_POST['administratorfname'],
-        "administratorlname" => $_POST['administratorlname'],
+        "administratorname" => $_POST['administratorname'],
         "administratoremail" => $_POST['administratoremail'],
         "administratorphone" => $_POST['administratorphone']
       ); 
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "administrator", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
+    
     /* ***** MANAGER ***** */ 
     else if (!empty($_POST['managerid'])) { 
       $progqry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
@@ -120,15 +139,30 @@ if (isset($_POST['submit'])) {
       $progrow = $progresult->fetch(PDO::FETCH_ASSOC); 
       $programid = $progrow['pid']; 
 
+      $adminqry = "SELECT ADMINISTRATORID AS adminid FROM ADMINISTRATOR WHERE ADMINISTRATORNAME = '{$_POST['administratorname']}'"; 
+      $adminresult = $connection->query($adminqry); 
+      $adminrow = $adminresult->fetch(PDO::FETCH_ASSOC); 
+      $administratorid = $adminrow['adminid']; 
+
       $new = array(
         "managerid" => $_POST['managerid'],
         "managerfname" => $_POST['managerfname'],
         "managerlname" => $_POST['managerlname'],
         "managerphone" => $_POST['managerphone'],
         "manageremail" => $_POST['manageremail'],
-        "programid" => $programid
+        "programid" => $programid,
+        "administratorid" => $administratorid
       ); 
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "manager", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+
+      // required for inserting into associative table 
+      $assoc = array(
+        "managerid" => $_POST['managerid'], 
+        "administratorid" => $administratorid
+      );       
+      $sqlassoc = sprintf("INSERT INTO %s (%s) values (%s)", "management", implode(", ", array_keys($assoc)), ":" . implode(", :", array_keys($assoc))); 
+      $statementassoc = $connection->prepare($sqlassoc);
+      $statementassoc->execute($assoc);
     } 
 
     $statement = $connection->prepare($sql);
@@ -153,7 +187,7 @@ if (isset($_POST['submit'])) {
     });
   </script> 
 
-  <div class="radio-toolbar"> 
+  <div class="radio-toolbar" style="text-align:center"> 
     <input type="radio" name="select" id="siteselect" value="Site" />
       <label for="siteselect">Site</label> 
     <input type="radio" name="select" id="programselect" value="Program" />
@@ -187,8 +221,8 @@ if (isset($_POST['submit'])) {
       <label for="sitezip">Site Zip</label>
       <input type="text" name="sitezip" id="sitezip">
       <label for="sitephone">Site Phone</label>
-      <input type="text" name="sitephone" id="sitephone">
-      <input type="submit" name="submit" value="Submit">
+      <input type="text" name="sitephone" id="sitephone"> <br>
+      <input class="standardbutton" type="submit" name="submit" value="Submit">
     </form>
   </div> 
 
@@ -199,8 +233,8 @@ if (isset($_POST['submit'])) {
       <label for="programid">Program ID</label>
       <input type="text" name="programid" id="programid">
       <label for="programname">Program Name</label>
-      <input type="text" name="programname" id="programname">
-      <input type="submit" name="submit" value="Submit">
+      <input type="text" name="programname" id="programname"> <br>
+      <input class="standardbutton" type="submit" name="submit" value="Submit">
     </form>
   </div> 
 
@@ -223,8 +257,8 @@ if (isset($_POST['submit'])) {
       <label for="programname">Program Name</label>
       <input type="text" name="programname" id="programname">
       <label for="sitename">Site Name</label>
-      <input type="text" name="sitename" id="sitename">
-      <input type="submit" name="submit" value="Submit">
+      <input type="text" name="sitename" id="sitename"> <br>
+      <input class="standardbutton" type="submit" name="submit" value="Submit">
     </form>
   </div> 
 
@@ -247,14 +281,16 @@ if (isset($_POST['submit'])) {
       <label for="programname">Program Name</label>
       <input type="text" name="programname" id="programname">
       <label for="sitename">Site Name</label>
-      <input type="text" name="sitename" id="sitename">
-      <input type="submit" name="submit" value="Submit">
+      <input type="text" name="sitename" id="sitename"> 
+      <label for="administratorname">Administrator Name</label>
+      <input type="text" name="administratorname" id="administratorname"> <br> 
+      <input class="standardbutton" type="submit" name="submit" value="Submit">
     </form>
   </div> 
 
   <div class="Instructor box" style="display:none"> 
     <form method="post" id="myinstructor">
-      <h2>Add a Instructor</h2>
+      <h2>Add an Instructor</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
       <label for="instructorid">Instructor ID</label>
       <input type="text" name="instructorid" id="instructorid">
@@ -265,8 +301,8 @@ if (isset($_POST['submit'])) {
       <label for="instructoremail">Email</label>
       <input type="text" name="instructoremail" id="instructoremail">
       <label for="sitename">Site Name</label>
-      <input type="text" name="sitename" id="sitename">
-      <input type="submit" name="submit" value="Submit">
+      <input type="text" name="sitename" id="sitename"> <br>
+      <input class="standardbutton" type="submit" name="submit" value="Submit">
     </form>
   </div> 
 
@@ -276,15 +312,13 @@ if (isset($_POST['submit'])) {
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
       <label for="administratorid">Administrator ID</label>
       <input type="text" name="administratorid" id="administratorid">
-      <label for="administratorfname">First Name</label>
-      <input type="text" name="administratorfname" id="administratorfname">
-      <label for="administratorlname">Last Name</label>
-      <input type="text" name="administratorlname" id="administratorlname">
+      <label for="administratorname">Name</label>
+      <input type="text" name="administratorname" id="administratorname">
       <label for="administratoremail">Email</label>
       <input type="text" name="administratoremail" id="administratoremail">
       <label for="administratorphone">Phone</label>
-      <input type="text" name="administratorphone" id="administratorphone">
-      <input type="submit" name="submit" value="Submit">
+      <input type="text" name="administratorphone" id="administratorphone"> <br>
+      <input class="standardbutton" type="submit" name="submit" value="Submit">
     </form>
   </div> 
 
@@ -303,8 +337,10 @@ if (isset($_POST['submit'])) {
       <label for="managerphone">Phone</label>
       <input type="text" name="managerphone" id="managerphone">
       <label for="programname">Program Name</label>
-      <input type="text" name="programname" id="programname">
-      <input type="submit" name="submit" value="Submit">
+      <input type="text" name="programname" id="programname"> 
+      <label for="administratorname">Administrator Name</label>
+      <input type="text" name="administratorname" id="administratorname"> <br> 
+      <input class="standardbutton" type="submit" name="submit" value="Submit">
     </form>
   </div> 
 
