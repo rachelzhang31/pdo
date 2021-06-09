@@ -102,6 +102,34 @@ if (isset($_POST['submit'])) {
       ); 
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "instructor", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
+    /* ***** ADMINISTRATOR ***** */ 
+    else if (!empty($_POST['administratorid'])) { 
+      $new = array(
+        "administratorid" => $_POST['administratorid'],
+        "administratorfname" => $_POST['administratorfname'],
+        "administratorlname" => $_POST['administratorlname'],
+        "administratoremail" => $_POST['administratoremail'],
+        "administratorphone" => $_POST['administratorphone']
+      ); 
+      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "administrator", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+    } 
+    /* ***** MANAGER ***** */ 
+    else if (!empty($_POST['managerid'])) { 
+      $progqry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
+      $progresult = $connection->query($progqry); 
+      $progrow = $progresult->fetch(PDO::FETCH_ASSOC); 
+      $programid = $progrow['pid']; 
+
+      $new = array(
+        "managerid" => $_POST['managerid'],
+        "managerfname" => $_POST['managerfname'],
+        "managerlname" => $_POST['managerlname'],
+        "managerphone" => $_POST['managerphone'],
+        "manageremail" => $_POST['manageremail'],
+        "programid" => $programid
+      ); 
+      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "manager", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+    } 
 
     $statement = $connection->prepare($sql);
     $statement->execute($new);
@@ -238,6 +266,44 @@ if (isset($_POST['submit'])) {
       <input type="text" name="instructoremail" id="instructoremail">
       <label for="sitename">Site Name</label>
       <input type="text" name="sitename" id="sitename">
+      <input type="submit" name="submit" value="Submit">
+    </form>
+  </div> 
+
+  <div class="Administrator box" style="display:none"> 
+    <form method="post" id="myadministrator">
+      <h2>Add an Administrator</h2>
+      <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+      <label for="administratorid">Administrator ID</label>
+      <input type="text" name="administratorid" id="administratorid">
+      <label for="administratorfname">First Name</label>
+      <input type="text" name="administratorfname" id="administratorfname">
+      <label for="administratorlname">Last Name</label>
+      <input type="text" name="administratorlname" id="administratorlname">
+      <label for="administratoremail">Email</label>
+      <input type="text" name="administratoremail" id="administratoremail">
+      <label for="administratorphone">Phone</label>
+      <input type="text" name="administratorphone" id="administratorphone">
+      <input type="submit" name="submit" value="Submit">
+    </form>
+  </div> 
+
+  <div class="Manager box" style="display:none"> 
+    <form method="post" id="mymanager">
+      <h2>Add a Manager</h2>
+      <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+      <label for="managerid">Manager ID</label>
+      <input type="text" name="managerid" id="managerid">
+      <label for="managerfname">First Name</label>
+      <input type="text" name="managerfname" id="managerfname">
+      <label for="managerlname">Last Name</label>
+      <input type="text" name="managerlname" id="managerlname">
+      <label for="manageremail">Email</label>
+      <input type="text" name="manageremail" id="manageremail">
+      <label for="managerphone">Phone</label>
+      <input type="text" name="managerphone" id="managerphone">
+      <label for="programname">Program Name</label>
+      <input type="text" name="programname" id="programname">
       <input type="submit" name="submit" value="Submit">
     </form>
   </div> 
