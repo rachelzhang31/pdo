@@ -17,6 +17,7 @@ if (isset($_POST['submit'])) {
     
     $new = null; 
 
+    /* ***** SITE ***** */ 
     if (!empty($_POST['siteid'])) { 
       $new = array(
         "siteid" => $_POST['siteid'],
@@ -29,6 +30,7 @@ if (isset($_POST['submit'])) {
       );
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "site", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
+    /* ***** PROGRAM ***** */ 
     else if (!empty($_POST['programid'])) { 
       $new = array(
         "programid" => $_POST['programid'],
@@ -36,8 +38,8 @@ if (isset($_POST['submit'])) {
       );
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "program", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
+    /* ***** VOLUNTEER ***** */ 
     else if (!empty($_POST['volunteerid'])) { 
-
       $progqry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
       $progresult = $connection->query($progqry); 
       $progrow = $progresult->fetch(PDO::FETCH_ASSOC); 
@@ -60,12 +62,52 @@ if (isset($_POST['submit'])) {
       ); 
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "volunteer", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
+    /* ***** DIRECTOR ***** */ 
+    else if (!empty($_POST['directorid'])) { 
+      $progqry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
+      $progresult = $connection->query($progqry); 
+      $progrow = $progresult->fetch(PDO::FETCH_ASSOC); 
+      $programid = $progrow['pid']; 
+
+      $siteqry = "SELECT SITEID AS sid FROM SITE WHERE SITENAME = '{$_POST['sitename']}'";
+      $siteresult = $connection->query($siteqry); 
+      $siterow = $siteresult->fetch(PDO::FETCH_ASSOC); 
+      $siteid = $siterow['sid']; 
+
+      $new = array(
+        "directorid" => $_POST['directorid'],
+        "directorfname" => $_POST['directorfname'],
+        "directorlname" => $_POST['directorlname'],
+        "directorphone" => $_POST['directorphone'],
+        "directoryear" => $_POST['directoryear'], 
+        "directoremail" => $_POST['directoremail'],
+        "programid" => $programid, 
+        "siteid" => $siteid
+      ); 
+      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "director", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+    } 
+    /* ***** INSTRUCTOR ***** */ 
+    else if (!empty($_POST['instructorid'])) { 
+      $siteqry = "SELECT SITEID AS sid FROM SITE WHERE SITENAME = '{$_POST['sitename']}'";
+      $siteresult = $connection->query($siteqry); 
+      $siterow = $siteresult->fetch(PDO::FETCH_ASSOC); 
+      $siteid = $siterow['sid']; 
+
+      $new = array(
+        "instructorid" => $_POST['instructorid'],
+        "instructorname" => $_POST['instructorname'],
+        "instructorphone" => $_POST['instructorphone'],
+        "instructoremail" => $_POST['instructoremail'],
+        "siteid" => $siteid
+      ); 
+      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "instructor", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+    } 
 
     $statement = $connection->prepare($sql);
     $statement->execute($new);
-  } catch(PDOException $error) {
+    } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
-  }
+    }
 }
 ?>
 <?php require "templates/header.php"; ?>
@@ -152,6 +194,48 @@ if (isset($_POST['submit'])) {
       <input type="text" name="volunteeremail" id="volunteeremail">
       <label for="programname">Program Name</label>
       <input type="text" name="programname" id="programname">
+      <label for="sitename">Site Name</label>
+      <input type="text" name="sitename" id="sitename">
+      <input type="submit" name="submit" value="Submit">
+    </form>
+  </div> 
+
+  <div class="Director box" style="display:none"> 
+    <form method="post" id="mydirector">
+      <h2>Add a Director</h2>
+      <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+      <label for="directorid">Director ID</label>
+      <input type="text" name="directorid" id="directorid">
+      <label for="directorfname">First Name</label>
+      <input type="text" name="directorfname" id="directorfname">
+      <label for="directorlname">Last Name</label>
+      <input type="text" name="directorlname" id="directorlname">
+      <label for="directorphone">Phone</label>
+      <input type="text" name="directorphone" id="directorphone">
+      <label for="directoryear">Year</label>
+      <input type="text" name="directoryear" id="directoryear">
+      <label for="directoremail">Email</label>
+      <input type="text" name="directoremail" id="directoremail">
+      <label for="programname">Program Name</label>
+      <input type="text" name="programname" id="programname">
+      <label for="sitename">Site Name</label>
+      <input type="text" name="sitename" id="sitename">
+      <input type="submit" name="submit" value="Submit">
+    </form>
+  </div> 
+
+  <div class="Instructor box" style="display:none"> 
+    <form method="post" id="myinstructor">
+      <h2>Add a Instructor</h2>
+      <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+      <label for="instructorid">Instructor ID</label>
+      <input type="text" name="instructorid" id="instructorid">
+      <label for="instructorname">Name</label>
+      <input type="text" name="instructorname" id="instructorname">
+      <label for="instructorphone">Phone</label>
+      <input type="text" name="instructorphone" id="instructorphone">
+      <label for="instructoremail">Email</label>
+      <input type="text" name="instructoremail" id="instructoremail">
       <label for="sitename">Site Name</label>
       <input type="text" name="sitename" id="sitename">
       <input type="submit" name="submit" value="Submit">
