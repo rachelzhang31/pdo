@@ -37,10 +37,17 @@ if (isset($_POST['submit'])) {
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "program", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
     else if (!empty($_POST['volunteerid'])) { 
-      $qry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
-      $result = $connection->query($qry); 
-      $row = $result->fetch(PDO::FETCH_ASSOC); 
-      $programid = $row['pid']; 
+
+      $progqry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
+      $progresult = $connection->query($progqry); 
+      $progrow = $progresult->fetch(PDO::FETCH_ASSOC); 
+      $programid = $progrow['pid']; 
+
+      $siteqry = "SELECT SITEID AS sid FROM SITE WHERE SITENAME = '{$_POST['sitename']}'";
+      $siteresult = $connection->query($siteqry); 
+      $siterow = $siteresult->fetch(PDO::FETCH_ASSOC); 
+      $siteid = $siterow['sid']; 
+
       $new = array(
         "volunteerid" => $_POST['volunteerid'],
         "volunteerfname" => $_POST['volunteerfname'],
@@ -48,15 +55,12 @@ if (isset($_POST['submit'])) {
         "volunteeryear" => $_POST['volunteeryear'],
         "volunteerphone" => $_POST['volunteerphone'], 
         "volunteeremail" => $_POST['volunteeremail'],
-        "programid" => $programid 
+        "programid" => $programid, 
+        "siteid" => $siteid
       ); 
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "volunteer", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
 
-    /*
-    ^^ still have to add site foreign key connection 
-    */ 
-    
     $statement = $connection->prepare($sql);
     $statement->execute($new);
   } catch(PDOException $error) {
@@ -148,6 +152,8 @@ if (isset($_POST['submit'])) {
       <input type="text" name="volunteeremail" id="volunteeremail">
       <label for="programname">Program Name</label>
       <input type="text" name="programname" id="programname">
+      <label for="sitename">Site Name</label>
+      <input type="text" name="sitename" id="sitename">
       <input type="submit" name="submit" value="Submit">
     </form>
   </div> 
