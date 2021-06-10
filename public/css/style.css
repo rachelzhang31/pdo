@@ -79,3 +79,43 @@ label {
 	font-family: "Helvetica"; 
 	font-weight: 100; 
 } 
+
+button.land {
+	width: 250px; 
+	height: 250px; 
+	background-color: #013d79ff; 
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	font-size: 16px;
+	font-family: "Helvetica";
+	font-weight: 100;
+	margin: 15px 15px 15px 15px; /* top right bottom left */
+}
+button.land:hover { 
+	background-color: #ffc82eff;
+	transform: scale(1.1);
+	color: black; 
+} 
+
+.item1 { grid-area: box1; }
+.item2 { grid-area: box2; }
+.item3 { grid-area: box3; }
+.item4 { grid-area: box4; }
+.item5 { grid-area: header; }
+
+.grid-container {
+    display: grid;
+	grid-template-areas:
+    	'header header header header'
+        'box1 box1 box2 box2'
+        'box3 box3 box4 box4';
+    grid-gap: 10px;
+}
+
+.grid-container > div {
+	text-align: center;
+}
