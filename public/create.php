@@ -9,131 +9,113 @@
 require "../config.php";
 require "../common.php";
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit'])) { // submit button selected 
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
+  // attempt to make a connection 
   try  {
     $connection = new PDO($dsn, $username, $password, $options);
-    
-    $new = null; 
+    $new = null; // array that will hold values 
 
-    /* ***** SITE ***** */ 
-    if (!empty($_POST['siteid'])) { 
-      $new = array(
-        "siteid" => $_POST['siteid'],
-        "sitename" => $_POST['sitename'],
-        "sitestreet" => $_POST['sitestreet'],
-        "sitecity" => $_POST['sitecity'],
-        "sitestate" => $_POST['sitestate'], 
-        "sitezip" => $_POST['sitezip'],
-        "sitephone" => $_POST['sitephone']
-      );
-      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "site", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
-    } 
-
-    /* ***** PROGRAM ***** */ 
-    else if (!empty($_POST['programid'])) { 
-      $new = array(
-        "programid" => $_POST['programid'],
-        "programname" => $_POST['programname'],
-      );
-      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "program", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
-    } 
-
-    /* ***** VOLUNTEER ***** */ 
-    else if (!empty($_POST['volunteerid'])) { 
+    /* ********** INSERT INTO VOLUNTEER TABLE ********** */ 
+    if (isset($_POST['volunteerfname'])) { // volunteer information has been entered 
+      // retrieving corresponding program ID 
       $progqry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
       $progresult = $connection->query($progqry); 
       $progrow = $progresult->fetch(PDO::FETCH_ASSOC); 
       $programid = $progrow['pid']; 
-
+      // retrieving corresponding site ID 
       $siteqry = "SELECT SITEID AS sid FROM SITE WHERE SITENAME = '{$_POST['sitename']}'";
       $siteresult = $connection->query($siteqry); 
       $siterow = $siteresult->fetch(PDO::FETCH_ASSOC); 
       $siteid = $siterow['sid']; 
-
+      // values that were entered into the form 
       $new = array(
-        "volunteerid" => $_POST['volunteerid'],
         "volunteerfname" => $_POST['volunteerfname'],
         "volunteerlname" => $_POST['volunteerlname'],
         "volunteeryear" => $_POST['volunteeryear'],
         "volunteerphone" => $_POST['volunteerphone'], 
         "volunteeremail" => $_POST['volunteeremail'],
-        "programid" => $programid, 
-        "siteid" => $siteid
+        "programid" => $programid, // derived value
+        "siteid" => $siteid // derived value 
       ); 
+      // inserting into the table 
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "volunteer", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $statement = $connection->prepare($sql);
+      $statement->execute($new); // executing the script 
     } 
 
-    /* ***** DIRECTOR ***** */ 
-    else if (!empty($_POST['directorid'])) { 
+    /* ********** INSERT INTO DIRECTOR TABLE ********** */ 
+    else if (isset($_POST['directorfname'])) { // director information has been entered 
+      // retrieving corresponding program ID 
       $progqry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
       $progresult = $connection->query($progqry); 
       $progrow = $progresult->fetch(PDO::FETCH_ASSOC); 
       $programid = $progrow['pid']; 
-
+      // retrieving corresponding site ID 
       $siteqry = "SELECT SITEID AS sid FROM SITE WHERE SITENAME = '{$_POST['sitename']}'";
       $siteresult = $connection->query($siteqry); 
       $siterow = $siteresult->fetch(PDO::FETCH_ASSOC); 
       $siteid = $siterow['sid']; 
-
+      // retrieving corresponding administrator ID 
       $adminqry = "SELECT ADMINISTRATORID AS adminid FROM ADMINISTRATOR WHERE ADMINISTRATORNAME = '{$_POST['administratorname']}'"; 
       $adminresult = $connection->query($adminqry); 
       $adminrow = $adminresult->fetch(PDO::FETCH_ASSOC); 
       $administratorid = $adminrow['adminid']; 
-
+      // values that were entered into the form 
       $new = array(
-        "directorid" => $_POST['directorid'],
         "directorfname" => $_POST['directorfname'],
         "directorlname" => $_POST['directorlname'],
         "directorphone" => $_POST['directorphone'],
         "directoryear" => $_POST['directoryear'], 
         "directoremail" => $_POST['directoremail'],
         "programid" => $programid, 
-        "siteid" => $siteid
-      ); 
-      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "director", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
-      
-      // required for inserting into associative table 
-      $assoc = array(
-        "directorid" => $_POST['directorid'], 
+        "siteid" => $siteid, 
         "administratorid" => $administratorid
-      );       
+      ); 
+      // inserting into the table
+      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "director", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $statement = $connection->prepare($sql);
+      $statement->execute($new); // executing the script
+      /* 
+      REQUIRED FOR ASSOCIATIVE TABLE 
+      */ 
+      // retrieving the corresponding director ID 
+      $directqry = "SELECT DIRECTORID AS directid FROM DIRECTOR WHERE DIRECTOREMAIL = '{$_POST['directoremail']}'"; 
+      $directresult = $connection->query($directqry); 
+      $directrow = $directresult->fetch(PDO::FETCH_ASSOC); 
+      $directorid = $directrow['directid']; 
+      // corresponding IDs for associative table 
+      $assoc = array(
+        "directorid" => $directorid, 
+        "administratorid" => $administratorid
+      ); 
+      // inserting into the associative table       
       $sqlassoc = sprintf("INSERT INTO %s (%s) values (%s)", "administration", implode(", ", array_keys($assoc)), ":" . implode(", :", array_keys($assoc))); 
       $statementassoc = $connection->prepare($sqlassoc);
-      $statementassoc->execute($assoc);
+      $statementassoc->execute($assoc); // executing the script 
     } 
 
-    /* ***** INSTRUCTOR ***** */ 
-    else if (!empty($_POST['instructorid'])) { 
+    /* ********** INSERT INTO THE INSTRUCTOR TABLE ********** */ 
+    else if (isset($_POST['instructorname'])) { 
       $siteqry = "SELECT SITEID AS sid FROM SITE WHERE SITENAME = '{$_POST['sitename']}'";
       $siteresult = $connection->query($siteqry); 
       $siterow = $siteresult->fetch(PDO::FETCH_ASSOC); 
       $siteid = $siterow['sid']; 
-
+      // values that were entered into the form
       $new = array(
-        "instructorid" => $_POST['instructorid'],
         "instructorname" => $_POST['instructorname'],
         "instructorphone" => $_POST['instructorphone'],
         "instructoremail" => $_POST['instructoremail'],
         "siteid" => $siteid
       ); 
+      // inserting into the table
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "instructor", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $statement = $connection->prepare($sql);
+      $statement->execute($new); // executing the script
     } 
 
-    /* ***** ADMINISTRATOR ***** */ 
-    else if (!empty($_POST['administratorid'])) { 
-      $new = array(
-        "administratorid" => $_POST['administratorid'],
-        "administratorname" => $_POST['administratorname'],
-        "administratoremail" => $_POST['administratoremail'],
-        "administratorphone" => $_POST['administratorphone']
-      ); 
-      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "administrator", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
-    } 
-
-    /* ***** MANAGER ***** */ 
-    else if (!empty($_POST['managerid'])) { 
+    /* ********** INSERT INTO THE MANAGER TABLE ********** */ 
+    else if (isset($_POST['managerfname'])) { 
       $progqry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
       $progresult = $connection->query($progqry); 
       $progrow = $progresult->fetch(PDO::FETCH_ASSOC); 
@@ -143,9 +125,8 @@ if (isset($_POST['submit'])) {
       $adminresult = $connection->query($adminqry); 
       $adminrow = $adminresult->fetch(PDO::FETCH_ASSOC); 
       $administratorid = $adminrow['adminid']; 
-
+      // values that were entered into the form
       $new = array(
-        "managerid" => $_POST['managerid'],
         "managerfname" => $_POST['managerfname'],
         "managerlname" => $_POST['managerlname'],
         "managerphone" => $_POST['managerphone'],
@@ -153,20 +134,72 @@ if (isset($_POST['submit'])) {
         "programid" => $programid,
         "administratorid" => $administratorid
       ); 
+      // inserting into the table
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "manager", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
-
-      // required for inserting into associative table 
+      $statement = $connection->prepare($sql);
+      $statement->execute($new); // executing the script
+      /* 
+      REQUIRED FOR ASSOCIATIVE TABLE 
+      */ 
+      // retrieving the corresponding manager ID 
+      $managerqry = "SELECT MANAGERID AS managid FROM MANAGER WHERE MANAGEREMAIL = '{$_POST['manageremail']}'"; 
+      $managresult = $connection->query($managerqry); 
+      $managrow = $managresult->fetch(PDO::FETCH_ASSOC); 
+      $managerid = $managrow['managid']; 
+      // corresponding IDs for associative table 
       $assoc = array(
-        "managerid" => $_POST['managerid'], 
+        "managerid" => $managerid, 
         "administratorid" => $administratorid
-      );       
+      ); 
+      // inserting into the associative table       
       $sqlassoc = sprintf("INSERT INTO %s (%s) values (%s)", "management", implode(", ", array_keys($assoc)), ":" . implode(", :", array_keys($assoc))); 
       $statementassoc = $connection->prepare($sqlassoc);
-      $statementassoc->execute($assoc);
+      $statementassoc->execute($assoc); // executing the script
     } 
 
-    $statement = $connection->prepare($sql);
-    $statement->execute($new);
+    /* ********** INSERT INTO THE ADMINISTRATOR TABLE ********** */ 
+    else if (isset($_POST['administratorname'])) { 
+      // values that were entered into the form
+      $new = array(
+        "administratorname" => $_POST['administratorname'],
+        "administratoremail" => $_POST['administratoremail'],
+        "administratorphone" => $_POST['administratorphone']
+      ); 
+      // inserting into the table
+      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "administrator", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $statement = $connection->prepare($sql);
+      $statement->execute($new); // executing the script
+    } 
+
+    /* ********** INSERT INTO THE SITE TABLE ********** */ 
+    else if (isset($_POST['sitename'])) { 
+      // values that were entered into the form
+      $new = array(
+        "sitename" => $_POST['sitename'],
+        "sitestreet" => $_POST['sitestreet'],
+        "sitecity" => $_POST['sitecity'],
+        "sitestate" => $_POST['sitestate'], 
+        "sitezip" => $_POST['sitezip'],
+        "sitephone" => $_POST['sitephone']
+      );
+      // inserting into the table
+      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "site", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $statement = $connection->prepare($sql);
+      $statement->execute($new); // executing the script
+    } 
+
+    /* ********** INSERT INTO THE PROGRAM TABLE ********** */ 
+    else if (isset($_POST['programname'])) { 
+      // values that were entered into the form
+      $new = array(
+        "programname" => $_POST['programname'],
+      );
+      // inserting into the table
+      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "program", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $statement = $connection->prepare($sql);
+      $statement->execute($new); // executing the script
+    } 
+
     echo "<script>alert('Successfully registered!');</script>"; 
   } 
   catch(PDOException $error) {
@@ -210,8 +243,6 @@ if (isset($_POST['submit'])) {
     <form method="post" id="mysite">
       <h2>Register a Site</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-      <label for="siteid">Site ID</label>
-      <input type="text" name="siteid" id="siteid">
       <label for="sitename">Site Name</label>
       <input type="text" name="sitename" id="sitename">
       <label for="sitestreet">Site Street</label>
@@ -232,8 +263,6 @@ if (isset($_POST['submit'])) {
     <form method="post" id="myprogram">
       <h2>Register a Program</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-      <label for="programid">Program ID</label>
-      <input type="text" name="programid" id="programid">
       <label for="programname">Program Name</label>
       <input type="text" name="programname" id="programname"> <br>
       <input class="standardbutton" type="submit" name="submit" value="Submit">
@@ -244,8 +273,6 @@ if (isset($_POST['submit'])) {
     <form method="post" id="myvolunteer">
       <h2>Register a Volunteer</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-      <label for="volunteerid">Volunteer ID</label>
-      <input type="text" name="volunteerid" id="volunteerid">
       <label for="volunteerfname">First Name</label>
       <input type="text" name="volunteerfname" id="volunteerfname">
       <label for="volunteerlname">Last Name</label>
@@ -268,8 +295,6 @@ if (isset($_POST['submit'])) {
     <form method="post" id="mydirector">
       <h2>Register a Director</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-      <label for="directorid">Director ID</label>
-      <input type="text" name="directorid" id="directorid">
       <label for="directorfname">First Name</label>
       <input type="text" name="directorfname" id="directorfname">
       <label for="directorlname">Last Name</label>
@@ -294,8 +319,6 @@ if (isset($_POST['submit'])) {
     <form method="post" id="myinstructor">
       <h2>Register an Instructor</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-      <label for="instructorid">Instructor ID</label>
-      <input type="text" name="instructorid" id="instructorid">
       <label for="instructorname">Name</label>
       <input type="text" name="instructorname" id="instructorname">
       <label for="instructorphone">Phone</label>
@@ -312,8 +335,6 @@ if (isset($_POST['submit'])) {
     <form method="post" id="myadministrator">
       <h2>Register an Administrator</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-      <label for="administratorid">Administrator ID</label>
-      <input type="text" name="administratorid" id="administratorid">
       <label for="administratorname">Name</label>
       <input type="text" name="administratorname" id="administratorname">
       <label for="administratoremail">Email</label>
@@ -328,8 +349,6 @@ if (isset($_POST['submit'])) {
     <form method="post" id="mymanager">
       <h2>Register a Manager</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-      <label for="managerid">Manager ID</label>
-      <input type="text" name="managerid" id="managerid">
       <label for="managerfname">First Name</label>
       <input type="text" name="managerfname" id="managerfname">
       <label for="managerlname">Last Name</label>
