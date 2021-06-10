@@ -16,8 +16,9 @@ if (isset($_POST["submit"])) {
     $connection = new PDO($dsn, $username, $password, $options);
   
     $id = $_POST["submit"];
+    $name = $_POST["var1"];
 
-    $sql = "DELETE FROM SITE WHERE SITEID = :id";
+    $sql = "DELETE FROM $name WHERE SITEID = :id";
 
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
@@ -92,6 +93,7 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["SITESTATE"]); ?></td>
         <td><?php echo escape($row["SITEZIP"]); ?></td>
         <td><?php echo escape($row["SITEPHONE"]); ?> </td>
+        <input type=hidden name=var1 value="SITE">
         <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
@@ -119,6 +121,7 @@ if (isset($_POST["submit"])) {
     foreach ($result as $row) : ?>
       <tr>
         <td><?php echo escape($row["PROGRAMNAME"]); ?></td>
+        <input type=hidden name=var1 value="PROGRAM">
         <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
@@ -154,6 +157,7 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["VOLUNTEERYEAR"]); ?></td>
         <td><?php echo escape($row["VOLUNTEERPHONE"]); ?></td>
         <td><?php echo escape($row["VOLUNTEEREMAIL"]); ?></td>
+        <input type=hidden name=var1 value="VOLUNTEER">
         <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
@@ -189,6 +193,7 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["DIRECTORPHONE"]); ?></td>
         <td><?php echo escape($row["DIRECTORYEAR"]); ?></td>
         <td><?php echo escape($row["DIRECTOREMAIL"]); ?></td>
+        <input type=hidden name=var1 value="DIRECTOR">
         <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
@@ -220,6 +225,7 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["INSTRUCTORNAME"]); ?></td>
         <td><?php echo escape($row["INSTRUCTORPHONE"]); ?></td>
         <td><?php echo escape($row["INSTRUCTOREMAIL"]); ?></td>
+        <input type=hidden name=var1 value="INSTRUCTOR">
         <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
@@ -251,6 +257,7 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["ADMINISTRATORNAME"]); ?></td>
         <td><?php echo escape($row["ADMINISTRATORPHONE"]); ?></td>
         <td><?php echo escape($row["ADMINISTRATOREMAIL"]); ?></td>
+        <input type=hidden name=var1 value="ADMINISTRATOR">
         <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
@@ -284,6 +291,7 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["MANAGERLNAME"]); ?></td>
         <td><?php echo escape($row["MANAGERPHONE"]); ?></td>
         <td><?php echo escape($row["MANAGEREMAIL"]); ?></td>
+        <input type=hidden name=var1 value="MANAGER">
         <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
