@@ -24,25 +24,28 @@ th {
 }
 .radio-toolbar label {
     display: inline-block;
-    background-color: #ddd;
+    background-color: #013d79ff;
     padding: 10px 20px;
     font-family: sans-serif, Arial;
     font-size: 16px;
-    border: 2px solid #444;
     border-radius: 4px;
+	color: white; 
 }
 .radio-toolbar input[type="radio"]:checked + label {
-    background-color:#bfb;
-    border-color: #4c4;
+    background-color:#ffc82eff;
+    color: black; 
 }
 .radio-toolbar label:hover {
-	background-color: #dfd;
+	background-color: #ffc82eff;
+	transform: scale(1.1);
+	color: black; 
 }
 
 h1 { 
 	font-family: Helvetica;
 	text-align: center;
 	font-weight: 100; 
+	margin-top: 30px;
 }
 
 h2 { 
@@ -52,7 +55,7 @@ h2 {
 } 
 
 input[type=submit] {
-	background-color: #4CAF50;
+	background-color: #013d79ff;
 	color: white;
 	padding: 12px 20px;
 	border: none;
@@ -62,7 +65,9 @@ input[type=submit] {
 	margin-top: 15px; 
 }
 input[type=submit]:hover {
-	background-color: #45a049;
+	background-color: #ffc82eff;
+	transform: scale(1.1);
+	color: black; 
 }
 
 input[type=text] { 

@@ -131,7 +131,7 @@ if (isset($_POST['submit'])) {
       ); 
       $sql = sprintf("INSERT INTO %s (%s) values (%s)", "administrator", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
     } 
-    
+
     /* ***** MANAGER ***** */ 
     else if (!empty($_POST['managerid'])) { 
       $progqry = "SELECT PROGRAMID AS pid FROM PROGRAM WHERE PROGRAMNAME = '{$_POST['programname']}'"; 
@@ -167,13 +167,15 @@ if (isset($_POST['submit'])) {
 
     $statement = $connection->prepare($sql);
     $statement->execute($new);
-    } catch(PDOException $error) {
-      echo $sql . "<br>" . $error->getMessage();
-    }
+    echo "<script>alert('Successfully registered!');</script>"; 
+  } 
+  catch(PDOException $error) {
+    echo $sql . "<br>" . $error->getMessage();
+    echo "<script>alert('There was an error with your registration. Please check your input values!');</script>";
+  }
 }
 ?>
 <?php require "templates/header.php"; ?>
-
 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script type="text/JavaScript"> 
@@ -206,7 +208,7 @@ if (isset($_POST['submit'])) {
 
   <div class="Site box" style="display:none"> 
     <form method="post" id="mysite">
-      <h2>Add a Site</h2>
+      <h2>Register a Site</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
       <label for="siteid">Site ID</label>
       <input type="text" name="siteid" id="siteid">
@@ -228,7 +230,7 @@ if (isset($_POST['submit'])) {
 
   <div class="Program box" style="display:none"> 
     <form method="post" id="myprogram">
-      <h2>Add a Program</h2>
+      <h2>Register a Program</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
       <label for="programid">Program ID</label>
       <input type="text" name="programid" id="programid">
@@ -240,7 +242,7 @@ if (isset($_POST['submit'])) {
 
   <div class="Volunteer box" style="display:none"> 
     <form method="post" id="myvolunteer">
-      <h2>Add a Volunteer</h2>
+      <h2>Register a Volunteer</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
       <label for="volunteerid">Volunteer ID</label>
       <input type="text" name="volunteerid" id="volunteerid">
@@ -264,7 +266,7 @@ if (isset($_POST['submit'])) {
 
   <div class="Director box" style="display:none"> 
     <form method="post" id="mydirector">
-      <h2>Add a Director</h2>
+      <h2>Register a Director</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
       <label for="directorid">Director ID</label>
       <input type="text" name="directorid" id="directorid">
@@ -290,7 +292,7 @@ if (isset($_POST['submit'])) {
 
   <div class="Instructor box" style="display:none"> 
     <form method="post" id="myinstructor">
-      <h2>Add an Instructor</h2>
+      <h2>Register an Instructor</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
       <label for="instructorid">Instructor ID</label>
       <input type="text" name="instructorid" id="instructorid">
@@ -308,7 +310,7 @@ if (isset($_POST['submit'])) {
 
   <div class="Administrator box" style="display:none"> 
     <form method="post" id="myadministrator">
-      <h2>Add an Administrator</h2>
+      <h2>Register an Administrator</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
       <label for="administratorid">Administrator ID</label>
       <input type="text" name="administratorid" id="administratorid">
@@ -324,7 +326,7 @@ if (isset($_POST['submit'])) {
 
   <div class="Manager box" style="display:none"> 
     <form method="post" id="mymanager">
-      <h2>Add a Manager</h2>
+      <h2>Register a Manager</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
       <label for="managerid">Manager ID</label>
       <input type="text" name="managerid" id="managerid">
