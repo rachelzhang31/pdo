@@ -39,7 +39,7 @@ if (isset($_POST['submit'])) { // submit button selected
         "siteid" => $siteid // derived value 
       ); 
       // inserting into the table 
-      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "volunteer", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $sql = sprintf("INSERT IGNORE INTO %s (%s) values (%s)", "volunteer", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
       $statement = $connection->prepare($sql);
       $statement->execute($new); // executing the script 
     } 
@@ -73,7 +73,7 @@ if (isset($_POST['submit'])) { // submit button selected
         "administratorid" => $administratorid
       ); 
       // inserting into the table
-      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "director", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $sql = sprintf("INSERT IGNORE INTO %s (%s) values (%s)", "director", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
       $statement = $connection->prepare($sql);
       $statement->execute($new); // executing the script
       /* 
@@ -90,7 +90,7 @@ if (isset($_POST['submit'])) { // submit button selected
         "administratorid" => $administratorid
       ); 
       // inserting into the associative table       
-      $sqlassoc = sprintf("INSERT INTO %s (%s) values (%s)", "administration", implode(", ", array_keys($assoc)), ":" . implode(", :", array_keys($assoc))); 
+      $sqlassoc = sprintf("INSERT IGNORE INTO %s (%s) values (%s)", "administration", implode(", ", array_keys($assoc)), ":" . implode(", :", array_keys($assoc))); 
       $statementassoc = $connection->prepare($sqlassoc);
       $statementassoc->execute($assoc); // executing the script 
     } 
@@ -109,7 +109,7 @@ if (isset($_POST['submit'])) { // submit button selected
         "siteid" => $siteid
       ); 
       // inserting into the table
-      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "instructor", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $sql = sprintf("INSERT IGNORE INTO %s (%s) values (%s)", "instructor", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
       $statement = $connection->prepare($sql);
       $statement->execute($new); // executing the script
     } 
@@ -135,7 +135,7 @@ if (isset($_POST['submit'])) { // submit button selected
         "administratorid" => $administratorid
       ); 
       // inserting into the table
-      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "manager", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $sql = sprintf("INSERT IGNORE INTO %s (%s) values (%s)", "manager", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
       $statement = $connection->prepare($sql);
       $statement->execute($new); // executing the script
       /* 
@@ -152,7 +152,7 @@ if (isset($_POST['submit'])) { // submit button selected
         "administratorid" => $administratorid
       ); 
       // inserting into the associative table       
-      $sqlassoc = sprintf("INSERT INTO %s (%s) values (%s)", "management", implode(", ", array_keys($assoc)), ":" . implode(", :", array_keys($assoc))); 
+      $sqlassoc = sprintf("INSERT IGNORE INTO %s (%s) values (%s)", "management", implode(", ", array_keys($assoc)), ":" . implode(", :", array_keys($assoc))); 
       $statementassoc = $connection->prepare($sqlassoc);
       $statementassoc->execute($assoc); // executing the script
     } 
@@ -166,7 +166,7 @@ if (isset($_POST['submit'])) { // submit button selected
         "administratorphone" => $_POST['administratorphone']
       ); 
       // inserting into the table
-      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "administrator", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $sql = sprintf("INSERT IGNORE INTO %s (%s) values (%s)", "administrator", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
       $statement = $connection->prepare($sql);
       $statement->execute($new); // executing the script
     } 
@@ -183,7 +183,7 @@ if (isset($_POST['submit'])) { // submit button selected
         "sitephone" => $_POST['sitephone']
       );
       // inserting into the table
-      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "site", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $sql = sprintf("INSERT IGNORE INTO %s (%s) values (%s)", "site", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
       $statement = $connection->prepare($sql);
       $statement->execute($new); // executing the script
     } 
@@ -195,7 +195,7 @@ if (isset($_POST['submit'])) { // submit button selected
         "programname" => $_POST['programname'],
       );
       // inserting into the table
-      $sql = sprintf("INSERT INTO %s (%s) values (%s)", "program", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
+      $sql = sprintf("INSERT IGNORE INTO %s (%s) values (%s)", "program", implode(", ", array_keys($new)), ":" . implode(", :", array_keys($new)));
       $statement = $connection->prepare($sql);
       $statement->execute($new); // executing the script
     } 
