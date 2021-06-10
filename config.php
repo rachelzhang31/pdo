@@ -8,7 +8,7 @@
 $host       = "localhost";
 $username   = "root"; // admin 
 $password   = ""; // password 
-$dbname     = "dbproj"; // dbproj 
+$dbname     = "dbproject"; // dbproj 
 // dsn below
 $options    = array(
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
