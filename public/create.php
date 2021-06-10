@@ -190,7 +190,7 @@ if (isset($_POST['submit'])) {
   </script> 
 
   <div class="radio-toolbar" style="text-align:center"> 
-    <input type="radio" name="select" id="siteselect" value="Site" />
+    <input type="radio" name="select" id="siteselect" value="Site" checked="checked"/>
       <label for="siteselect">Site</label> 
     <input type="radio" name="select" id="programselect" value="Program" />
       <label for="programselect">Program</label> 
@@ -206,7 +206,7 @@ if (isset($_POST['submit'])) {
       <label for="adminselect">Administrator</label> 
   </div> 
 
-  <div class="Site box" style="display:none"> 
+  <div class="Site box"> 
     <form method="post" id="mysite">
       <h2>Register a Site</h2>
       <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
