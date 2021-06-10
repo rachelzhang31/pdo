@@ -17,68 +17,282 @@ if (isset($_POST["submit"])) {
   
     $id = $_POST["submit"];
 
-    $sql = "DELETE FROM users WHERE id = :id";
+    $sql = "DELETE FROM SITE WHERE SITEID = :id";
 
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
     $statement->execute();
 
-    $success = "User successfully deleted";
+    $success = "Site successfully deleted";
   } catch(PDOException $error) {
     echo $sql . "<br>" . $error->getMessage();
   }
 }
-
-try {
-  $connection = new PDO($dsn, $username, $password, $options);
-
-  $sql = "SELECT * FROM users";
-
-  $statement = $connection->prepare($sql);
-  $statement->execute();
-
-  $result = $statement->fetchAll();
-} catch(PDOException $error) {
-  echo $sql . "<br>" . $error->getMessage();
-}
 ?>
+
 <?php require "templates/header.php"; ?>
-        
-<h2>Delete users</h2>
 
-<?php if ($success) echo $success; ?>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script type="text/JavaScript"> 
+    $(document).ready(function(){
+      $('input[type="radio"]').click(function(){
+          var inputValue = $(this).attr("value");
+          var targetBox = $("." + inputValue);
+          $(".box").not(targetBox).hide();
+          $(targetBox).show();
+      });
+    });
+  </script> 
 
+<div class="radio-toolbar" style="text-align:center"> 
+<form action ="" method="post">
+    <input type="radio" name="select" id="siteselect" value="Site" checked="checked"/>
+      <label for="siteselect">Site</label> 
+    <input type="radio" name="select" id="programselect" value="Program" />
+      <label for="programselect">Program</label> 
+    <input type="radio" name="select" id="volunteerselect" value="Volunteer" />
+      <label for="volunteerselect">Volunteer</label> 
+    <input type="radio" name="select" id="directorselect" value="Director" />
+      <label for="directorselect">Program Director</label> 
+    <input type="radio" name="select" id="managerselect" value="Manager" />
+      <label for="managerselect">Manager</label> 
+    <input type="radio" name="select" id="instructorselect" value="Instructor" />
+      <label for="instructorselect">Instructor</label> 
+    <input type="radio" name="select" id="adminselect" value="Administrator" />
+      <label for="adminselect">Administrator</label> 
+  </form>
+  </div> 
+
+<div class="Site box">
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
     <thead>
       <tr>
-        <th>#</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Email Address</th>
-        <th>Age</th>
-        <th>Location</th>
-        <th>Date</th>
-        <th>Delete</th>
+        <th>Name</th>
+        <th>Street</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip Code</th>
+        <th>Phone</th>
       </tr>
     </thead>
     <tbody>
-    <?php foreach ($result as $row) : ?>
+    <?php 
+    $connection = new PDO($dsn, $username, $password, $options);
+    $sql = "SELECT * FROM SITE";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll();
+    foreach ($result as $row) : ?>
       <tr>
-        <td><?php echo escape($row["id"]); ?></td>
-        <td><?php echo escape($row["firstname"]); ?></td>
-        <td><?php echo escape($row["lastname"]); ?></td>
-        <td><?php echo escape($row["email"]); ?></td>
-        <td><?php echo escape($row["age"]); ?></td>
-        <td><?php echo escape($row["location"]); ?></td>
-        <td><?php echo escape($row["date"]); ?> </td>
-        <td><button type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete</button></td>
+        <td><?php echo escape($row["SITENAME"]); ?></td>
+        <td><?php echo escape($row["SITESTREET"]); ?></td>
+        <td><?php echo escape($row["SITECITY"]); ?></td>
+        <td><?php echo escape($row["SITESTATE"]); ?></td>
+        <td><?php echo escape($row["SITEZIP"]); ?></td>
+        <td><?php echo escape($row["SITEPHONE"]); ?> </td>
+        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
     </tbody>
   </table>
 </form>
+</div>
+
+<div class="Program box">
+<form method="post">
+  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php 
+    $connection = new PDO($dsn, $username, $password, $options);
+    $sql = "SELECT * FROM PROGRAM";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll();
+    foreach ($result as $row) : ?>
+      <tr>
+        <td><?php echo escape($row["PROGRAMNAME"]); ?></td>
+        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+      </tr>
+    <?php endforeach; ?>
+    </tbody>
+  </table>
+</form>
+</div>
+
+<div class="Volunteer box">
+<form method="post">
+  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+  <table>
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Year</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php
+    $connection = new PDO($dsn, $username, $password, $options);
+    $sql = "SELECT * FROM VOLUNTEER";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll();
+    foreach ($result as $row) : ?>
+      <tr>
+        <td><?php echo escape($row["VOLUNTEERFNAME"]); ?></td>
+        <td><?php echo escape($row["VOLUNTEERLNAME"]); ?></td>
+        <td><?php echo escape($row["VOLUNTEERYEAR"]); ?></td>
+        <td><?php echo escape($row["VOLUNTEERPHONE"]); ?></td>
+        <td><?php echo escape($row["VOLUNTEEREMAIL"]); ?></td>
+        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+      </tr>
+    <?php endforeach; ?>
+    </tbody>
+  </table>
+</form>
+</div>
+
+<div class="Director box">
+<form method="post">
+  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+  <table>
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Phone</th>
+        <th>Year</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php
+    $connection = new PDO($dsn, $username, $password, $options);
+    $sql = "SELECT * FROM DIRECTOR";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll();
+    foreach ($result as $row) : ?>
+      <tr>
+        <td><?php echo escape($row["DIRECTORFNAME"]); ?></td>
+        <td><?php echo escape($row["DIRECTORLNAME"]); ?></td>
+        <td><?php echo escape($row["DIRECTORPHONE"]); ?></td>
+        <td><?php echo escape($row["DIRECTORYEAR"]); ?></td>
+        <td><?php echo escape($row["DIRECTOREMAIL"]); ?></td>
+        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+      </tr>
+    <?php endforeach; ?>
+    </tbody>
+  </table>
+</form>
+</div>
+
+<div class="Instructor box">
+<form method="post">
+  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php
+    $connection = new PDO($dsn, $username, $password, $options);
+    $sql = "SELECT * FROM INSTRUCTOR";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll();
+    foreach ($result as $row) : ?>
+      <tr>
+        <td><?php echo escape($row["INSTRUCTORNAME"]); ?></td>
+        <td><?php echo escape($row["INSTRUCTORPHONE"]); ?></td>
+        <td><?php echo escape($row["INSTRUCTOREMAIL"]); ?></td>
+        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+      </tr>
+    <?php endforeach; ?>
+    </tbody>
+  </table>
+</form>
+</div>
+
+<div class="Administrator box">
+<form method="post">
+  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php
+    $connection = new PDO($dsn, $username, $password, $options);
+    $sql = "SELECT * FROM ADMINISTRATOR";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll();
+    foreach ($result as $row) : ?>
+      <tr>
+        <td><?php echo escape($row["ADMINISTRATORNAME"]); ?></td>
+        <td><?php echo escape($row["ADMINISTRATORPHONE"]); ?></td>
+        <td><?php echo escape($row["ADMINISTRATOREMAIL"]); ?></td>
+        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+      </tr>
+    <?php endforeach; ?>
+    </tbody>
+  </table>
+</form>
+</div>
+
+<div class="Manager box">
+<form method="post">
+  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+  <table>
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php
+    $connection = new PDO($dsn, $username, $password, $options);
+    $sql = "SELECT * FROM MANAGER";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll();
+    foreach ($result as $row) : ?>
+      <tr>
+        <td><?php echo escape($row["MANAGERFNAME"]); ?></td>
+        <td><?php echo escape($row["MANAGERLNAME"]); ?></td>
+        <td><?php echo escape($row["MANAGERPHONE"]); ?></td>
+        <td><?php echo escape($row["MANAGEREMAIL"]); ?></td>
+        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+      </tr>
+    <?php endforeach; ?>
+    </tbody>
+  </table>
+</form>
+</div>
+
+<?php if ($success) echo $success; ?>
 
 <a href="index.php">Back to home</a>
 
