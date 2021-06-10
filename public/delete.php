@@ -102,7 +102,7 @@ if (isset($_POST["submit"])) {
 </form>
 </div>
 
-<div class="Program box">
+<div class="Program box" style="display:none">
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
@@ -130,7 +130,7 @@ if (isset($_POST["submit"])) {
 </form>
 </div>
 
-<div class="Volunteer box">
+<div class="Volunteer box" style="display:none">
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
@@ -166,7 +166,7 @@ if (isset($_POST["submit"])) {
 </form>
 </div>
 
-<div class="Director box">
+<div class="Director box" style="display:none">
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
@@ -202,7 +202,7 @@ if (isset($_POST["submit"])) {
 </form>
 </div>
 
-<div class="Instructor box">
+<div class="Instructor box" style="display:none">
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
@@ -234,7 +234,7 @@ if (isset($_POST["submit"])) {
 </form>
 </div>
 
-<div class="Administrator box">
+<div class="Administrator box" style="display:none">
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
@@ -266,7 +266,7 @@ if (isset($_POST["submit"])) {
 </form>
 </div>
 
-<div class="Manager box">
+<div class="Manager box" style="display:none">
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
