@@ -64,7 +64,7 @@ if (isset($_POST["submit"])) {
     $statement->bindValue(':id', $id);
     $statement->execute();
 
-    $success = "Site successfully deleted";
+    $success = "$name successfully deleted";
   } catch(PDOException $error) {
     echo $sql . "<br>" . $error->getMessage();
   }
