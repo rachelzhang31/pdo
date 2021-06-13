@@ -16,9 +16,49 @@ if (isset($_POST["submit"])) {
     $connection = new PDO($dsn, $username, $password, $options);
   
     $id = $_POST["submit"];
-    $name = $_POST["var1"];
+    $name = $_POST["entityName"];
 
-    $sql = "DELETE FROM $name WHERE SITEID = :id";
+    
+
+    if ($name == "PROGRAM") {
+      $sql = "UPDATE DIRECTOR SET PROGRAMID = NULL WHERE PROGRAMID = :id;
+              UPDATE VOLUNTEER SET PROGRAMID = NULL WHERE PROGRAMID = :id;
+              UPDATE MANAGER SET PROGRAMID = NULL WHERE PROGRAMID = :id;
+              DELETE FROM PROGRAM WHERE PROGRAMID = :id;";
+    }
+
+    else if ($name == "DIRECTOR") {
+      $sql = "UPDATE ADMINISTRATION SET DIRECTORID = NULL WHERE DIRECTORID = :id;
+              DELETE FROM DIRECTOR WHERE DIRECTORID = :id;";
+    }
+
+    else if ($name == "INSTRUCTOR") {
+      $sql = "DELETE FROM INSTRUCTOR WHERE INSTRUCTORID = :id;";
+    }
+
+    else if ($name == "VOLUNTEER") {
+      $sql = "DELETE FROM VOLUNTEER WHERE VOLUNTEERID = :id;";
+    }
+
+    else if ($name == "ADMINISTRATOR") {
+      $sql = "DELETE FROM ADMINISTRATION WHERE ADMINISTRATORID = :id;
+              DELETE FROM MANAGEMENT WHERE ADMINISTRATORID = :id;
+              DELETE FROM ADMINISTRATOR WHERE ADMINISTRATORID = :id;";
+    }
+
+    else if ($name == "MANAGER") {
+      $sql = "UPDATE MANAGEMENT SET MANAGERID = NULL WHERE MANAGERID = :id;
+              DELETE FROM MANAGER WHERE MANAGERID = :id;";
+    }
+
+    else {
+      if ($name == "SITE") {
+        $sql = "UPDATE INSTRUCTOR SET SITEID = NULL WHERE SITEID = :id;
+                UPDATE VOLUNTEER SET SITEID = NULL WHERE SITEID = :id;
+                UPDATE DIRECTOR SET SITEID = NULL WHERE SITEID = :id;
+                DELETE FROM SITE WHERE SITEID = :id;";
+      }
+    }
 
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
@@ -93,7 +133,7 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["SITESTATE"]); ?></td>
         <td><?php echo escape($row["SITEZIP"]); ?></td>
         <td><?php echo escape($row["SITEPHONE"]); ?> </td>
-        <input type=hidden name=var1 value="SITE">
+        <input type=hidden name=entityName value="SITE">
         <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
@@ -121,8 +161,8 @@ if (isset($_POST["submit"])) {
     foreach ($result as $row) : ?>
       <tr>
         <td><?php echo escape($row["PROGRAMNAME"]); ?></td>
-        <input type=hidden name=var1 value="PROGRAM">
-        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+        <input type=hidden name=entityName value="PROGRAM">
+        <td><button type="submit" name="submit" value="<?php echo escape($row["PROGRAMID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
     </tbody>
@@ -157,8 +197,8 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["VOLUNTEERYEAR"]); ?></td>
         <td><?php echo escape($row["VOLUNTEERPHONE"]); ?></td>
         <td><?php echo escape($row["VOLUNTEEREMAIL"]); ?></td>
-        <input type=hidden name=var1 value="VOLUNTEER">
-        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+        <input type=hidden name=entityName value="VOLUNTEER">
+        <td><button type="submit" name="submit" value="<?php echo escape($row["VOLUNTEERID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
     </tbody>
@@ -193,8 +233,8 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["DIRECTORPHONE"]); ?></td>
         <td><?php echo escape($row["DIRECTORYEAR"]); ?></td>
         <td><?php echo escape($row["DIRECTOREMAIL"]); ?></td>
-        <input type=hidden name=var1 value="DIRECTOR">
-        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+        <input type=hidden name=entityName value="DIRECTOR">
+        <td><button type="submit" name="submit" value="<?php echo escape($row["DIRECTORID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
     </tbody>
@@ -225,8 +265,8 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["INSTRUCTORNAME"]); ?></td>
         <td><?php echo escape($row["INSTRUCTORPHONE"]); ?></td>
         <td><?php echo escape($row["INSTRUCTOREMAIL"]); ?></td>
-        <input type=hidden name=var1 value="INSTRUCTOR">
-        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+        <input type=hidden name=entityName value="INSTRUCTOR">
+        <td><button type="submit" name="submit" value="<?php echo escape($row["INSTRUCTORID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
     </tbody>
@@ -257,8 +297,8 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["ADMINISTRATORNAME"]); ?></td>
         <td><?php echo escape($row["ADMINISTRATORPHONE"]); ?></td>
         <td><?php echo escape($row["ADMINISTRATOREMAIL"]); ?></td>
-        <input type=hidden name=var1 value="ADMINISTRATOR">
-        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+        <input type=hidden name=entityName value="ADMINISTRATOR">
+        <td><button type="submit" name="submit" value="<?php echo escape($row["ADMINISTRATORID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
     </tbody>
@@ -291,8 +331,8 @@ if (isset($_POST["submit"])) {
         <td><?php echo escape($row["MANAGERLNAME"]); ?></td>
         <td><?php echo escape($row["MANAGERPHONE"]); ?></td>
         <td><?php echo escape($row["MANAGEREMAIL"]); ?></td>
-        <input type=hidden name=var1 value="MANAGER">
-        <td><button type="submit" name="submit" value="<?php echo escape($row["SITEID"]); ?>">Delete</button></td>
+        <input type=hidden name=entityName value="MANAGER">
+        <td><button type="submit" name="submit" value="<?php echo escape($row["MANAGERID"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
     </tbody>
