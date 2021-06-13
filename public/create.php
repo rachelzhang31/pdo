@@ -365,7 +365,7 @@ if (isset($_POST['submit'])) { // submit button selected
     </form>
   </div> 
 
-  <a href="index.php">Back to home</a>
+<a href="index.php" style="font-family: 'Helvetica'">Back to home</a>
 
 <?php require "templates/footer.php"; ?>
 

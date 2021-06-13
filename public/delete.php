@@ -302,6 +302,6 @@ if (isset($_POST["submit"])) {
 
 <?php if ($success) echo $success; ?>
 
-<a href="index.php">Back to home</a>
+<a href="index.php" style="font-family: 'Helvetica'">Back to home</a>
 
 <?php require "templates/footer.php"; ?>
