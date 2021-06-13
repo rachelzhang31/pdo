@@ -5,10 +5,10 @@
  *
  */
 
-$host       = "localhost";
-$username   = "root"; // admin 
-$password   = ""; // password 
-$dbname     = "dbproject"; // dbproj 
+$host       = "us-cdbr-east-04.cleardb.com";
+$username   = "b7e40fb9de4cec"; // admin 
+$password   = "b5692dc4"; // password 
+$dbname     = "heroku_6c89511a6790ebd"; // dbproj 
 // dsn below
 $options    = array(
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -37,4 +37,17 @@ catch (Exception $e) { // handle any type of exception
 <?php
 // to close a connection 
 // $db = null;
+?>
+
+<?php
+//Get Heroku ClearDB connection information
+$cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+$cleardb_server = $cleardb_url["host"];
+$cleardb_username = $cleardb_url["user"];
+$cleardb_password = $cleardb_url["pass"];
+$cleardb_db = substr($cleardb_url["path"],1);
+$active_group = 'default';
+$query_builder = TRUE;
+// Connect to DB
+$conn = mysqli_connect($cleardb_server, $cleardb_username, $cleardb_password, $cleardb_db);
 ?>
