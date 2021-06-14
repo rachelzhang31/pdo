@@ -72,6 +72,7 @@ if (isset($_POST["submit"])) {
 ?>
 
 <?php require "templates/header.php"; ?>
+<h2>Delete a Member of Madison House</h2>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script type="text/JavaScript"> 
@@ -102,7 +103,7 @@ if (isset($_POST["submit"])) {
     <input type="radio" name="select" id="adminselect" value="Administrator" />
       <label for="adminselect">Administrator</label> 
   </form>
-  </div> 
+</div> 
 
 <div class="Site box">
 <form method="post">
