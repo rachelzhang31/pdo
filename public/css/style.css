@@ -94,6 +94,7 @@ button.land {
 	font-size: 16px;
 	font-family: "Helvetica";
 	font-weight: 100;
+	margin: 15px 15px 15px 15px; /* top right bottom left */
 }
 button.land:hover { 
 	background-color: #ffc82eff;

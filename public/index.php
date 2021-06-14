@@ -8,7 +8,7 @@
 	</div>
 	<div class="item3" style="display: flex; justify-content: flex-end;"> <button class="land" onclick="location.href='update.php'"> Update a Madison House Member </button>
 	</div>
-	<div class="item4"> <button class="land" onclick="location.href='delete.php'"> Delete a Madison House Member </button>
+	<div class="item4" style="display: flex; justify-content: flex-start;"> <button class="land" onclick="location.href='delete.php'"> Delete a Madison House Member </button>
 	</div>
 </div> 
 
