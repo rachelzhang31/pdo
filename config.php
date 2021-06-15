@@ -21,7 +21,7 @@ LINK TO PHP MY ADMIN
 $dsn = "mysql:host=$host;dbname=$dbname";
 
 try {
-   $db = new PDO($dsn, $username, $password); // try to connect to the database 
+   $db = new PDO($dsn, $username, $password, $options); // try to connect to the database 
 } 
 catch (PDOException $e) { // handle a PDO exception 
    $error_message = $e->getMessage();
