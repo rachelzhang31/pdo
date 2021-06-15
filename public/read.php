@@ -1,5 +1,3 @@
-<h1> PLEASE WORK <h1> 
-
 <?php
 
 /**
@@ -31,7 +29,7 @@ try  {
             WHERE programid = $programid";
     $programname = $_POST['programname'];
     $statement = $connection->prepare($sql);
-    $statement->bindParam(':programname', $programname, PDO::PARAM_STR);
+    $statement->bindParam('programname', $programname, PDO::PARAM_STR);
     $statement->execute();
     $result = $statement->fetchAll();
   }

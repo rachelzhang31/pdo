@@ -34,7 +34,3 @@ catch (Exception $e) { // handle any type of exception
 
 ?>
 
-<?php
-// to close a connection 
-// $db = null;
-?>
