@@ -9,7 +9,7 @@
 require "config.php";
 
 try {
-    $connection = new PDO("mysql:host=$host", $username, $password, $options);
+    $connection = new PDO("mysql:host=$host", $username, $password);
     $sql = file_get_contents("data/init.sql");
     $connection->exec($sql);
     

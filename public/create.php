@@ -13,7 +13,7 @@ if (isset($_POST['submit'])) { // submit button selected
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
   // attempt to make a connection 
   try  {
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $new = null; // array that will hold values 
 
     /* ********** INSERT INTO VOLUNTEER TABLE ********** */ 
@@ -212,6 +212,10 @@ if (isset($_POST['submit'])) { // submit button selected
 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script type="text/JavaScript"> 
+  /*
+  This function handles the radio buttons.
+  Specifically, how the buttons display content when selected.
+  */
     $(document).ready(function(){
       $('input[type="radio"]').click(function(){
           var inputValue = $(this).attr("value");
@@ -344,7 +348,7 @@ if (isset($_POST['submit'])) { // submit button selected
       <input class="standardbutton" type="submit" name="submit" value="Submit">
     </form>
   </div> 
-
+  
   <div class="Manager box" style="display:none"> 
     <form method="post" id="mymanager">
       <h2>Register a Manager</h2>

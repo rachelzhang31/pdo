@@ -1,7 +1,9 @@
 <?php
 
 /**
- * Delete a user
+ * This page allows a user to delete a Madison House entity 
+ * Ensures integrity through reassigning foreign keys 
+ * Maintains parent-child relationships when a parent is deleted 
  */
 
 require "../config.php";
@@ -13,12 +15,10 @@ if (isset($_POST["submit"])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
   
     $id = $_POST["submit"];
     $name = $_POST["entityName"];
-
-    
 
     if ($name == "PROGRAM") {
       $sql = "UPDATE DIRECTOR SET PROGRAMID = NULL WHERE PROGRAMID = :id;
@@ -64,7 +64,7 @@ if (isset($_POST["submit"])) {
     $statement->bindValue(':id', $id);
     $statement->execute();
 
-    $success = "$name successfully deleted,";
+    $success = "$name successfully deleted";
   } catch(PDOException $error) {
     echo $sql . "<br>" . $error->getMessage();
   }
@@ -121,7 +121,7 @@ if (isset($_POST["submit"])) {
     </thead>
     <tbody>
     <?php 
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $sql = "SELECT * FROM SITE";
     $statement = $connection->prepare($sql);
     $statement->execute();
@@ -154,7 +154,7 @@ if (isset($_POST["submit"])) {
     </thead>
     <tbody>
     <?php 
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $sql = "SELECT * FROM PROGRAM";
     $statement = $connection->prepare($sql);
     $statement->execute();
@@ -186,7 +186,7 @@ if (isset($_POST["submit"])) {
     </thead>
     <tbody>
     <?php
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $sql = "SELECT * FROM VOLUNTEER";
     $statement = $connection->prepare($sql);
     $statement->execute();
@@ -222,7 +222,7 @@ if (isset($_POST["submit"])) {
     </thead>
     <tbody>
     <?php
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $sql = "SELECT * FROM DIRECTOR";
     $statement = $connection->prepare($sql);
     $statement->execute();
@@ -256,7 +256,7 @@ if (isset($_POST["submit"])) {
     </thead>
     <tbody>
     <?php
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $sql = "SELECT * FROM INSTRUCTOR";
     $statement = $connection->prepare($sql);
     $statement->execute();
@@ -288,7 +288,7 @@ if (isset($_POST["submit"])) {
     </thead>
     <tbody>
     <?php
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $sql = "SELECT * FROM ADMINISTRATOR";
     $statement = $connection->prepare($sql);
     $statement->execute();
@@ -321,7 +321,7 @@ if (isset($_POST["submit"])) {
     </thead>
     <tbody>
     <?php
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $sql = "SELECT * FROM MANAGER";
     $statement = $connection->prepare($sql);
     $statement->execute();
@@ -341,7 +341,7 @@ if (isset($_POST["submit"])) {
 </form>
 </div>
 
-<?php if ($success) echo $success; ?>
+<?php if ($success) echo "<div style='font-family:Helvetica; font-weight:100;'> $success </div>"; ?>
 
 <a href="index.php" style="font-family: 'Helvetica'">Back to home</a>
 

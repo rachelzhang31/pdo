@@ -1,5 +1,9 @@
-<?php include "templates/header.php"; ?>
+<!-- 
+Landing page
+Elements are contained in a grid for box display 
+ -->
 
+<?php include "templates/header.php"; ?>
 
 <div class="grid-container"> 
 	<div class="item1" style="display: flex; justify-content: flex-end;"> <button class="land" onclick="location.href='create.php'"> Register a Madison House Member </button> 
@@ -11,6 +15,5 @@
 	<div class="item4" style="display: flex; justify-content: flex-start;"> <button class="land" onclick="location.href='delete.php'"> Delete a Madison House Member </button>
 	</div>
 </div> 
-
 
 <?php include "templates/footer.php"; ?>

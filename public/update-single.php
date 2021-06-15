@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Use an HTML form to edit an entry in the
- * users table.
- *
+ * Use an HTML form to edit an entry in one of the tables.
  */
 
 require "../config.php";
@@ -17,7 +15,7 @@ if (isset($_POST['submit'])) {
 
   try {
     if ($table=="ADMINISTRATOR"){
-      $connection = new PDO($dsn, $username, $password, $options);
+      $connection = new PDO($dsn, $username, $password);
       $administrator =[
         "ADMINISTRATORID"        => $_POST['ADMINISTRATORID'],
         "ADMINISTRATORNAME" => $_POST['ADMINISTRATORNAME'],
@@ -37,7 +35,7 @@ if (isset($_POST['submit'])) {
       $statement->execute($administrator);
     }
     else if ($table=="SITE"){
-      $connection = new PDO($dsn, $username, $password, $options);
+      $connection = new PDO($dsn, $username, $password);
       $site =[
         "SITEID"        => $_POST['SITEID'],
         "SITENAME" => $_POST['SITENAME'],
@@ -62,7 +60,7 @@ if (isset($_POST['submit'])) {
       $statement->execute($site);
     }
     else if ($table == "PROGRAM"){
-      $connection = new PDO($dsn, $username, $password, $options);
+      $connection = new PDO($dsn, $username, $password);
       $program =[
         "PROGRAMID"        => $_POST['PROGRAMID'],
         "PROGRAMNAME" => $_POST['PROGRAMNAME']
@@ -77,7 +75,7 @@ if (isset($_POST['submit'])) {
       $statement->execute($program);
     }
     else if ($table == "VOLUNTEER"){
-      $connection = new PDO($dsn, $username, $password, $options);
+      $connection = new PDO($dsn, $username, $password);
       $volunteer =[
         "VOLUNTEERID"        => $_POST['VOLUNTEERID'],
         "VOLUNTEERFNAME" => $_POST['VOLUNTEERFNAME'],
@@ -105,7 +103,7 @@ if (isset($_POST['submit'])) {
       $statement->execute($volunteer);
     }
     else if ($table == "DIRECTOR"){
-      $connection = new PDO($dsn, $username, $password, $options);
+      $connection = new PDO($dsn, $username, $password);
       $director =[
         "DIRECTORID"        => $_POST['DIRECTORID'],
         "DIRECTORFNAME" => $_POST['DIRECTORFNAME'],
@@ -135,7 +133,7 @@ if (isset($_POST['submit'])) {
       $statement->execute($director);
     }
     else if ($table == "MANAGER"){
-      $connection = new PDO($dsn, $username, $password, $options);
+      $connection = new PDO($dsn, $username, $password);
       $manager =[
         "MANAGERID"        => $_POST['MANAGERID'],
         "MANAGERFNAME" => $_POST['MANAGERFNAME'],
@@ -161,7 +159,7 @@ if (isset($_POST['submit'])) {
       $statement->execute($manager);
     }
     else{ //instructor
-      $connection = new PDO($dsn, $username, $password, $options);
+      $connection = new PDO($dsn, $username, $password);
       $instructor =[
         "INSTRUCTORID"        => $_POST['INSTRUCTORID'],
         "INSTRUCTORNAME" => $_POST['INSTRUCTORNAME'],
@@ -190,7 +188,7 @@ if (isset($_POST['submit'])) {
   
 if (isset($_GET['ADMINISTRATORID'])) {
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $ADMINISTRATORID = $_GET['ADMINISTRATORID'];
     $sql = "SELECT * FROM ADMINISTRATOR WHERE ADMINISTRATORID = :ADMINISTRATORID";
     $statement = $connection->prepare($sql);
@@ -204,7 +202,7 @@ if (isset($_GET['ADMINISTRATORID'])) {
 
 else if (isset($_GET['MANAGERID'])) {
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $MANAGERID = $_GET['MANAGERID'];
 
     $sql = "SELECT * FROM MANAGER WHERE MANAGERID = :MANAGERID";
@@ -219,7 +217,7 @@ else if (isset($_GET['MANAGERID'])) {
 } 
 else if (isset($_GET['SITEID'])) {
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $SITEID = $_GET['SITEID'];
 
     $sql = "SELECT * FROM SITE WHERE SITEID = :SITEID";
@@ -234,7 +232,7 @@ else if (isset($_GET['SITEID'])) {
 } 
 else if (isset($_GET['PROGRAMID'])) {
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $PROGRAMID = $_GET['PROGRAMID'];
 
     $sql = "SELECT * FROM PROGRAM WHERE PROGRAMID = :PROGRAMID";
@@ -249,7 +247,7 @@ else if (isset($_GET['PROGRAMID'])) {
 } 
 else if (isset($_GET['VOLUNTEERID'])) {
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $VOLUNTEERID = $_GET['VOLUNTEERID'];
 
     $sql = "SELECT * FROM VOLUNTEER WHERE VOLUNTEERID = :VOLUNTEERID";
@@ -264,7 +262,7 @@ else if (isset($_GET['VOLUNTEERID'])) {
 } 
 else if (isset($_GET['DIRECTORID'])) {
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $DIRECTORID = $_GET['DIRECTORID'];
 
     $sql = "SELECT * FROM DIRECTOR WHERE DIRECTORID = :DIRECTORID";
@@ -279,7 +277,7 @@ else if (isset($_GET['DIRECTORID'])) {
 } 
 else if (isset($_GET['INSTRUCTORID'])) {
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
+    $connection = new PDO($dsn, $username, $password);
     $INSTRUCTORID = $_GET['INSTRUCTORID'];
 
     $sql = "SELECT * FROM INSTRUCTOR WHERE INSTRUCTORID = :INSTRUCTORID";
@@ -301,7 +299,7 @@ else {
 <?php require "templates/header.php"; ?>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
-	<blockquote>Entry successfully updated.</blockquote>
+	<blockquote style="font-family: Helvetica; font-weight:100;">Entry successfully updated.</blockquote>
 <?php endif; ?>
 
 <?php
@@ -411,6 +409,6 @@ if($table=="ADMINISTRATOR"){ ?>
 ?>
 
 
-<a href="index.php">Back to home</a>
+<a href="index.php" style="font-family: 'Helvetica'">Back to home</a>
 
 <?php require "templates/footer.php"; ?>

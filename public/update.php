@@ -1,7 +1,9 @@
 <?php
 
 /**
- * List all users with a link to edit
+ * This page allows a user to update an entry 
+ * Users are able to update any registereted entity 
+ * Identification keys are handled automatically 
  */
 
 require "../config.php";
@@ -11,7 +13,6 @@ require "../common.php";
 <?php require "templates/header.php"; ?>
         
 <h2>Update members</h2>
-
 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script type="text/JavaScript"> 
@@ -60,7 +61,7 @@ require "../common.php";
         </thead>
         <tbody>
         <?php 
-        $connection = new PDO($dsn, $username, $password, $options);
+        $connection = new PDO($dsn, $username, $password);
         $sql = "SELECT * FROM SITE";
         $statement = $connection->prepare($sql);
         $statement->execute();
@@ -94,7 +95,7 @@ require "../common.php";
         </thead>
         <tbody>
         <?php 
-        $connection = new PDO($dsn, $username, $password, $options);
+        $connection = new PDO($dsn, $username, $password);
         $sql = "SELECT * FROM PROGRAM";
         $statement = $connection->prepare($sql);
         $statement->execute();
@@ -129,7 +130,7 @@ require "../common.php";
         </thead>
         <tbody>
         <?php 
-        $connection = new PDO($dsn, $username, $password, $options);
+        $connection = new PDO($dsn, $username, $password);
         $sql = "SELECT * FROM VOLUNTEER";
         $statement = $connection->prepare($sql);
         $statement->execute();
@@ -171,7 +172,7 @@ require "../common.php";
         </thead>
         <tbody>
         <?php 
-        $connection = new PDO($dsn, $username, $password, $options);
+        $connection = new PDO($dsn, $username, $password);
         $sql = "SELECT * FROM DIRECTOR";
         $statement = $connection->prepare($sql);
         $statement->execute();
@@ -211,7 +212,7 @@ require "../common.php";
         </thead>
         <tbody>
         <?php 
-        $connection = new PDO($dsn, $username, $password, $options);
+        $connection = new PDO($dsn, $username, $password);
         $sql = "SELECT * FROM INSTRUCTOR";
         $statement = $connection->prepare($sql);
         $statement->execute();
@@ -245,7 +246,7 @@ require "../common.php";
         </thead>
         <tbody>
         <?php 
-        $connection = new PDO($dsn, $username, $password, $options);
+        $connection = new PDO($dsn, $username, $password);
         $sql = "SELECT * FROM ADMINISTRATOR";
         $statement = $connection->prepare($sql);
         $statement->execute();
@@ -281,7 +282,7 @@ require "../common.php";
         </thead>
         <tbody>
         <?php 
-        $connection = new PDO($dsn, $username, $password, $options);
+        $connection = new PDO($dsn, $username, $password);
         $sql = "SELECT * FROM MANAGER";
         $statement = $connection->prepare($sql);
         $statement->execute();
@@ -303,20 +304,6 @@ require "../common.php";
     </form>
   </div> 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<a href="index.php">Back to home</a>
+<a href="index.php" style="font-family: 'Helvetica'">Back to home</a>
 
 <?php require "templates/footer.php"; ?>

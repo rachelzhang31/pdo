@@ -1,18 +1,17 @@
 <?php
 
 /**
- * Function to query information based on 
- * a parameter: in this case, location.
- *
+ * This page allows a user to submit queries 
+ * The user can search for summary statements by volunteer and program director attributes 
+ * Alternatively, the user can retrieve a master-detail report 
  */
 
 require "../config.php";
 require "../common.php";
 
-
 try  {
   // connectinng to the database 
-  $connection = new PDO($dsn, $username, $password, $options);
+  $connection = new PDO($dsn, $username, $password);
   /**
    * VOLUNTEER PROGRAM NAME SUMMARY QUERY 
    */
