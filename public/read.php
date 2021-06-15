@@ -276,7 +276,7 @@ if (isset($_POST['submit1']) || isset($_POST['submit2']) || isset($_POST['submit
       </tbody>
     </table>
     <?php } else { ?>
-      <blockquote> No results found! </blockquote>
+      <blockquote style="font-family: Helvetica; font-weight:100;"> No results found! </blockquote>
     <?php } 
 } ?> 
 
@@ -311,7 +311,7 @@ if (isset($_POST['submit5']) || isset($_POST['submit6']) || isset($_POST['submit
       </tbody>
     </table>
     <?php } else { ?>
-      <blockquote> No results found! </blockquote>
+      <blockquote style="font-family: Helvetica; font-weight:100;"> No results found! </blockquote>
     <?php } 
 } ?> 
 
