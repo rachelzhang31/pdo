@@ -28,7 +28,7 @@ if (isset($_POST["submit"])) {
     }
 
     else if ($name == "DIRECTOR") {
-      $sql = "UPDATE ADMINISTRATION SET DIRECTORID = NULL WHERE DIRECTORID = :id;
+      $sql = "DELETE FROM ADMINISTRATION WHERE DIRECTORID = :id;
               DELETE FROM DIRECTOR WHERE DIRECTORID = :id;";
     }
 
@@ -47,7 +47,7 @@ if (isset($_POST["submit"])) {
     }
 
     else if ($name == "MANAGER") {
-      $sql = "UPDATE MANAGEMENT SET MANAGERID = NULL WHERE MANAGERID = :id;
+      $sql = "DELETE FROM MANAGEMENT WHERE MANAGERID = :id;
               DELETE FROM MANAGER WHERE MANAGERID = :id;";
     }
 
