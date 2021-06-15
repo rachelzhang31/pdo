@@ -25,7 +25,8 @@ if (isset($_POST['submit'])) {
         "ADMINISTRATORPHONE"     => $_POST['ADMINISTRATORPHONE']
       ];
   
-      $sql = "UPDATE ADMINISTRATOR 
+      $sql = "SET FOREIGN_KEY_CHECKS = 0;
+              UPDATE ADMINISTRATOR 
               SET ADMINISTRATORID = :ADMINISTRATORID, 
                 ADMINISTRATORNAME = :ADMINISTRATORNAME, 
                 ADMINISTRATOREMAIL = :ADMINISTRATOREMAIL, 
@@ -88,7 +89,8 @@ if (isset($_POST['submit'])) {
         "SITEID" => $_POST['SITEID']
       ];
   
-      $sql = "UPDATE VOLUNTEER
+      $sql = "SET FOREIGN_KEY_CHECKS = 0;
+              UPDATE VOLUNTEER
               SET VOLUNTEERID = :VOLUNTEERID, 
               VOLUNTEERFNAME = :VOLUNTEERFNAME, 
               VOLUNTEERLNAME = :VOLUNTEERLNAME, 
@@ -116,7 +118,8 @@ if (isset($_POST['submit'])) {
         "ADMINISTRATORID" => $_POST['ADMINISTRATORID']
       ];
   
-      $sql = "UPDATE DIRECTOR
+      $sql = "SET FOREIGN_KEY_CHECKS = 0;
+              UPDATE DIRECTOR
               SET DIRECTORID = :DIRECTORID, 
               DIRECTORFNAME = :DIRECTORFNAME, 
               DIRECTORLNAME = :DIRECTORLNAME, 
@@ -143,7 +146,8 @@ if (isset($_POST['submit'])) {
         "ADMINISTRATORID" => $_POST['ADMINISTRATORID']
       ];
   
-      $sql = "UPDATE MANAGER
+      $sql = "SET FOREIGN_KEY_CHECKS = 0;
+              UPDATE MANAGER    
               SET MANAGERID = :MANAGERID, 
               MANAGERFNAME = :MANAGERFNAME, 
               MANAGERLNAME = :MANAGERLNAME, 
@@ -166,7 +170,8 @@ if (isset($_POST['submit'])) {
         "SITEID" => $_POST['SITEID']
       ];
   
-      $sql = "UPDATE INSTRUCTOR
+      $sql = "SET FOREIGN_KEY_CHECKS = 0;
+              UPDATE INSTRUCTOR
               SET INSTRUCTORID = :INSTRUCTORID, 
               INSTRUCTORNAME = :INSTRUCTORNAME,
               INSTRUCTORPHONE = :INSTRUCTORPHONE,
