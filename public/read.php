@@ -62,6 +62,7 @@ try  {
             WHERE volunteeryear = :volunteeryear";
     $volunteeryear = $_POST['volunteeryear'];
     $statement = $connection->prepare($sql);
+    $statement->bindParam(':volunteeryear', $volunteeryear, PDO::PARAM_STR);
     $statement->execute();
     $result = $statement->fetchAll();
   }
@@ -156,6 +157,7 @@ try  {
             WHERE directoryear = :directoryear";
     $directoryear = $_POST['directoryear'];
     $statement = $connection->prepare($sql);
+    $statement->bindParam(':directoryear', $directoryear, PDO::PARAM_STR);
     $statement->execute();
     $result = $statement->fetchAll();
   }
