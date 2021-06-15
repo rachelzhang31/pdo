@@ -162,9 +162,7 @@ try  {
   }
 } 
 catch(PDOException $error) {
-  echo "<script>alert('There was an error with your selection! Please check your inputs and try again.');</script>";
-  // echo "<label> There was an error with your selection! Please check your inputs and try again.</label>"; 
-  echo $sql . "<br>" . $error->getMessage();
+  echo "<script><p style='font-family: Helvetica; font-weight:100;'>No results found!</p></script>";
 }
 ?>
 
