@@ -1,3 +1,5 @@
+<h1> PLEASE WORK <h1> 
+
 <?php
 
 /**
@@ -8,6 +10,7 @@
 
 require "../config.php";
 require "../common.php";
+
 
 try  {
   // connectinng to the database 
