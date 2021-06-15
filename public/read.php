@@ -29,7 +29,7 @@ try  {
             WHERE programid = $programid";
     $programname = $_POST['programname'];
     $statement = $connection->prepare($sql);
-    $statement->bindParam('programname', $programname, PDO::PARAM_STR);
+    $statement->bindParam(':programname', $programname, PDO::PARAM_STR, 40);
     $statement->execute();
     $result = $statement->fetchAll();
   }
