@@ -14,7 +14,6 @@ if (empty($_SESSION['csrf'])) {
 
 /**
  * Escapes HTML for output
- *
  */
 
 function escape($html) {
